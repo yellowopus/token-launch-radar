@@ -1,2 +1,124 @@
-#coding:l1
-import lzma;exec(lzma.decompress('\0\0\0e\0\0\0\0\0\0\0áxÓ,¥Y)Ë8@ÂvnŞ9fLäÒ|nHzïîzßÑ"DÇk9!Õu$T<Öû6ß%äÑ¤`ÌòˆTT\r“”ğƒéÒîW¬tÒ{¾M\'º×:+Võ(|¯ûõaÈ/¯®^b+/È.÷¦P`YÑv’‘Àã×i‡UIÁ´AÒeëÏª>SX×®Û&‰J¢Ò H´²y¹äèwã%ä®p.9×+WFBZ	NwA€€.>È¤’yZ`ìùWÆã^%Œ¸€q‚};:U*{^6F¯µï(áö¸ê3d–mŸyŞÚ?òBótÛIJ¼2>PŸ`C_ûê½é»\0kÙfµÖÑ:šG¤ßAûÚ~d²±cM~UıN	J6-Å"ÄékjÎ¯«‡®\'E\\A‰yÊ0úÊÎ‡{üÖ¹MÌ×à‡§MX$Xç(ã1æĞÌjñšFÂ~ôßû	Ğè	!Î¨4\0º­¿åG^¨•ö°ÜØş–Ã+a–Œø6O\\<§ZèæÉP\\ı‰ÛVQ|™29Àã»ĞŸ‹ë‰(~3]Ë*²ƒ\n>²h0¦Ã\no¤ºWÕªÉMV(»ù!jA_)Å‚²íœ<A¶ƒOßcüb~)ê÷Ş3*Ï¾×ş¿j¸vOÆ˜\'[øŸ§>wÊ‰ÉeMÌkÍ\\ÏG‹wÑ^!7’¶£ƒçÑÒ_Ø\r•\r1Ë†Ë@rØS§I³‚EWSk›+ƒZ{kuBÜĞÏ·ºÎWÙô8÷›-½<7ñÆÿ]vPlD‹i0_ËíåüM„àù¥”n]ûèòCT»(ş]ÉyöwJ¤Ê¥ˆ“«í¾«t-ò’A½ú¶„~.IÈM7ßd:*4EÊkçÇ?‚6ÄVE>òFŒÁìÆ\r>$¾«è·\0t”UvW¹t%î‰Å¯¬ ’º6¿ÎëşÄn&iØ„¾f@¿Ä0-/b·İn#t<3WêŠÅ^œj¬Å)’ö8qÚxà¤oªàPV†#m•§©f‚:¾²òëÅÙPÁ—ºTI"1³3jºèèo³Høã1är:) Â:˜8uRØôò´YÂ4$t:ÇªØ«\rEÕkìywšÒä›2Z\0:<ØtÃ‚Â†×èÔãëY¬Ym\'1àŠ-ZL!1(jh\'òª€ÅÃ€š=ºŠi½úlàôb(İ]Æ<šm“ÖŒtÕí3k˜!(}yp¯†Ietä¡<›Ã\\m·¹„míšó‰İ™4IGiSÃ&ğ¦Jº=J/±ŞÆ‡Z"-»	.{¡£à«!_!°˜qïÕ&	K‚ØPt"”è ,DN—Rk)JbJûoşÓğèß88q_ IŞRİ£óîü]/M>ÙÇkÈü¼C(Ír`¦/Ú¨Tš\n¬ØQ}á¨Q\\ŒXö)[ñ‘’ì¥€0_F3"T•¡äî\rÇ[‹¨ò™†æû@@w×?ÄÌyH¸	îÆƒŞ£$:ï¢ÏçGÈh§hoÿ _J#\nÁ\\ÑBñ}C¢şìòç‚„9¥<o„~»’²MrV+İxÙbğòì¼ä–«%ãxolÒÏù\rPÈğwÕôU6É®âÈìßÈ½Ñ3>I–ò—„ö’½g©äRòfhmé-à2·êP™ı®aY TxØêÛŸñdO{JIEZ÷	miiUV8!·ŠÙÏêºvŞ;rĞ±i­çsˆ`BÄ¹RJ\\‰CLï?×…‰Ì¬öÌæ2ªU´±Ÿ$”|AD<\r-®˜½÷W[h"#î‘¼ÿN÷„zeJa‡„¨¾›D<aNø8şmëÉÂèäÎrİYÍóB*¶°É,yÕc"¦ò58 \\M†VN\nÈÎ®0/ÈÑ­(ÌÖ)X˜ÎÄ Ï=êí\0•óğGÊ\'I3rŞÃJ¨^k¾ç×¼“P[èt„F¤\'÷ç%?ó„ãÍ=õ_÷È§.>ò‹]<lâ7?yÀÍ¿ˆ–/PáÆ0Ìá÷¾3õLDúÊfE¶èr†½Ø®.ÖÈó{Ë"¾ºË\rIí´ìùøş“!ÈAÈb_w|\\Áë”IÔS¢ºiWUÂ…ìZo†ïj·‘!k<+ybŠÆıEœj¯^ñVŒ7Ry|ö±·{g!ãrBôôBVÜÑóe«ºÛe\'(’É¸\rÿ)ª¡ğï(H­›l7çB²4«Õ*1c°Äî¹ftù5{ÁW}Ê ;ªCnö’‘\rvRÍö<u²|øfä£7¾u(Ë¶¼á©ø&#+°\\ğ3ŞHwÊÜYäğ²¶÷:(Å¯"–»Í5Cc¹m_Õ\'3ÆÈÚÍ“@&ïÖÇc¶Ÿ*â³m®àKœƒDäúrß¡‘m·ÄIet‰fŞ\n\n½Òe}ÂEÙƒ3uy:mı:!şº…Á†<Ïô×³œi”ÎR5Ğ\0î¾^CuÛkö¥U~€rg	ÖzCø«ë¦µÚ>àsí˜36æ(5™¢øÖØP¡	t"\rÓ„k™(ô·V"úÅSïuë¶(ÈO“$vÇéÌWŠ'.encode('l1')))
+// main.ts â€” the radar entrypoint.
+//
+// Reads the sealed snapshot, scores every candidate protocol with lib/model.ts, validates the board
+// against the gate rules, then writes board.json, the page data.js, dashboard/, screenshots/ and
+// finally dossier.json. No network, no clock, no randomness: two runs on the same snapshot write the
+// same bytes.
+//
+//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts --input /input/snapshot.json
+
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { boardIssue, buildBoard, dataScript, liveRows, parseSnapshot, MODEL_VERSION } from "./lib/model.ts";
+import { buildDossier } from "./vendor/makefun-board.ts";
+
+const here = fileURLToPath(new URL(".", import.meta.url));
+
+/** --name <value> out of the arguments, or the fallback; --name=value works too. */
+function parseArgs(argv: string[]): { input: string; output: string } {
+  const value = (name: string, fallback: string): string => {
+    const withEquals = argv.find((a) => a.startsWith("--" + name + "="));
+    if (withEquals !== undefined) return withEquals.slice(name.length + 3);
+    const at = argv.indexOf("--" + name);
+    return at >= 0 && at + 1 < argv.length ? argv[at + 1]! : fallback;
+  };
+  return {
+    input: value("input", "/input"),
+    output: value("output", process.env.MAKEFUN_OUTPUT_DIR ?? "/output"),
+  };
+}
+
+/** The snapshot file and the output directory, resolved from the parsed arguments. */
+function resolvePaths(args: { input: string; output: string }): { inputFile: string; out: string } {
+  return {
+    inputFile: args.input.endsWith(".json") ? args.input : join(args.input, "snapshot.json"),
+    out: args.output,
+  };
+}
+
+/** Copy the regular files of one directory into the target directory, skipping dot-names; returns what was copied. */
+function copyFiles(from: string, to: string): string[] {
+  if (!existsSync(from)) return [];
+  mkdirSync(to, { recursive: true });
+  const copied: string[] = [];
+  for (const name of readdirSync(from)) {
+    if (name.startsWith(".")) continue;
+    const path = join(from, name);
+    if (!statSync(path).isFile()) continue;
+    copyFileSync(path, join(to, name));
+    copied.push(name);
+  }
+  return copied;
+}
+
+/** The whole run: parse, resolve, score, validate, write. Exits 0 on success, 1 on a refused board or
+ *  missing assets, 2 on a missing snapshot. */
+function run(): void {
+  const { inputFile, out } = resolvePaths(parseArgs(process.argv));
+
+  if (!existsSync(inputFile)) {
+    process.stderr.write("radar: no snapshot at " + inputFile + "; pass --input <snapshot.json|dir>\n");
+    process.exit(2);
+  }
+
+  const snapshot = parseSnapshot(readFileSync(inputFile, "utf8"));
+  const { board, sectors, global } = buildBoard(snapshot);
+  const live = liveRows(snapshot);
+
+  const issue = boardIssue(board, snapshot);
+  if (issue !== null) {
+    process.stderr.write("radar: the board would be refused by the gate: " + issue + "\n");
+    process.exit(1);
+  }
+
+  mkdirSync(out, { recursive: true });
+  writeFileSync(join(out, "board.json"), JSON.stringify({ rows: board }) + "\n");
+
+  const data = {
+    as_of: snapshot.as_of,
+    source: snapshot.source,
+    floor_usd: snapshot.floor_usd,
+    model_version: MODEL_VERSION,
+    watchlist_size: snapshot.watchlist.length,
+    board_size: board.length,
+    early_size: board.filter((r) => !snapshot.watchlist.includes(r.slug)).length,
+    global_multiple: global,
+    growth_weight: 0.35,
+    maturity_floor: 0.55,
+    maturity_range: 0.45,
+    maturity_days: 1095,
+    sectors,
+    rows: board,
+    live,
+  };
+  writeFileSync(join(out, "data.js"), dataScript(data));
+
+  const dashFiles = copyFiles(join(here, "dashboard"), join(out, "dashboard"));
+  if (!dashFiles.includes("index.html")) {
+    process.stderr.write("radar: dashboard/index.html is missing from this repository\n");
+    process.exit(1);
+  }
+  const shots = copyFiles(join(here, "screenshots"), join(out, "screenshots"));
+  if (shots.length < 3) {
+    process.stderr.write("radar: screenshots/ holds " + shots.length + " image(s); the gate wants 3: board, detail, filtered\n");
+    process.exit(1);
+  }
+
+  writeFileSync(
+    join(out, "dossier.json"),
+    buildDossier(out, {
+      text_max_bytes: 65_536,
+      screenshots: { max: 4, max_bytes: 524_288 },
+      dashboard: { max_files: 400, max_bytes: 4_194_304 },
+    }),
+  );
+
+  process.stdout.write(
+    "radar: " + MODEL_VERSION + " scored " + snapshot.protocols.length + " protocols, " + board.length + " rows ranked (" + snapshot.watchlist.length + " watchlisted)\\n" +
+    "radar: " + sectors.length + " sectors, " + live.length + " live rows, global multiple " + global.toFixed(4) + "\\n" +
+    "radar: wrote board.json, data.js, dashboard/ (" + dashFiles.length + " files), screenshots/ (" + shots.length + ") and dossier.json in " + out + "\\n",
+  );
+}
+
+run();
