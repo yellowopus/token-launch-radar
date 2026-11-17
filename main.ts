@@ -1,16 +1,13 @@
 /**
- * Radar board entrypoint.
+ * radar — entrypoint for the token launch radar.
  *
- * Builds a token radar board from a snapshot file, renders the board
- * artifacts, copies the static dashboard and screenshot assets, and
- * prints a compact summary to stdout.
+ * Reads the sealed DefiLlama snapshot, scores every pre-token protocol with lib/model.ts,
+ * checks the board against the gate's rules, then writes the artifacts: board.json, the
+ * page's data.js, a copy of dashboard/ and screenshots/, and dossier.json. Deterministic:
+ * no clock, no network, no randomness, so a second run over the same snapshot writes the
+ * same bytes.
  *
- * Run command:
- *   node main.ts --input <file-or-dir> [--output <dir>]
- *
- * Defaults:
- *   input  -> /input
- *   output -> MAKEFUN_OUTPUT_DIR, or /output
+ *   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts --input /input/snapshot.json
  */
 import { boardIssue, buildBoard, dataScript, liveRows, parseSnapshot, MODEL_VERSION } from './lib/model.ts';
 import { buildDossier } from './vendor/makefun-board.ts';
@@ -21,65 +18,44 @@ const DEFAULT_INPUT = '/input';
 const DEFAULT_OUTPUT = '/output';
 
 /**
- * Read the process arguments into an input/output pair.
+ * Pull --name value / --name=value pairs out of argv, with fallbacks to the environment
+ * and the protocol defaults.
  */
 function parseArgv(argv) {
-  let input = DEFAULT_INPUT;
-  let output = process.env.MAKEFUN_OUTPUT_DIR || DEFAULT_OUTPUT;
-  for (let index = 0; index < argv.length; index += 1) {
-    const flag = argv[index];
-    if (flag === '--input') {
-      input = argv[index + 1] || input;
-      index += 1;
-    } else if (flag === '--output') {
-      output = argv[index + 1] || output;
-      index += 1;
-    }
-  }
-  return { input, output };
+  const value = (flag, fallback) => {
+    const inline = argv.find((a) => a.startsWith('--' + flag + '='));
+    if (inline !== undefined) return inline.slice(flag.length + 3);
+    const at = argv.indexOf('--' + flag);
+    return at >= 0 && at + 1 < argv.length ? argv[at + 1] : fallback;
+  };
+  return {
+    input: value('input', DEFAULT_INPUT),
+    output: value('output', process.env.MAKEFUN_OUTPUT_DIR ?? DEFAULT_OUTPUT),
+  };
 }
 
 /**
- * Convert a file-or-directory input into the concrete snapshot path.
+ * The snapshot file to read: a path ending in .json is used as-is, anything else is a
+ * directory holding snapshot.json.
  */
 function snapshotPathFor(inputPath) {
   let path = inputPath;
-  try {
-    if (statSync(path).isDirectory()) {
-      path = join(path, 'snapshot.json');
-    }
-  } catch {
-    // Missing paths are surfaced by the loader below.
+  if (!path.endsWith('.json')) {
+    path = join(path, 'snapshot.json');
   }
   return path;
 }
 
 /**
- * Load and parse the snapshot, bailing out when it is absent.
+ * Load and parse the snapshot, exiting with status 2 when it is absent.
  */
 function loadSnapshot(inputPath) {
   const snapshotPath = snapshotPathFor(inputPath);
   if (!existsSync(snapshotPath)) {
-    process.stderr.write('snapshot missing: ' + snapshotPath + '\n');
+    process.stderr.write('radar: no snapshot at ' + snapshotPath + '; pass --input <snapshot.json|dir>\n');
     process.exit(2);
   }
   return parseSnapshot(readFileSync(snapshotPath, 'utf8'));
-}
-
-/**
- * Pull the rows and sectors out of whatever shape the builder returns.
- */
-function splitBoard(board) {
-  if (Array.isArray(board)) {
-    return { rows: board, sectors: [] };
-  }
-  if (board && Array.isArray(board.rows)) {
-    return {
-      rows: board.rows,
-      sectors: Array.isArray(board.sectors) ? board.sectors : [],
-    };
-  }
-  return { rows: [], sectors: [] };
 }
 
 /**
@@ -108,27 +84,26 @@ function copyTree(sourceDir, targetDir) {
 }
 
 /**
- * Count the rows that are still in the early phase.
+ * Count rows outside the house watchlist: candidates the model found on its own.
  */
-function countEarly(rows) {
-  return rows.filter((row) => row && (row.early === true || row.stage === 'early')).length;
+function countEarly(rows, watchlist) {
+  const listed = new Set(watchlist);
+  return rows.filter((row) => !listed.has(row.slug)).length;
 }
 
 /**
- * Compose the payload consumed by dataScript.
+ * Assemble the dataset the dashboard page reads out of window.RADAR.
  */
-function payloadFor(snapshot, board, live) {
-  const { rows, sectors } = splitBoard(board);
-  const watchlist = Array.isArray(snapshot.watchlist) ? snapshot.watchlist : (Array.isArray(snapshot.rows) ? snapshot.rows : []);
+function payloadFor(snapshot, rows, sectors, globalMultiple, live) {
   return {
-    as_of: snapshot.as_of ?? snapshot.asOf ?? '',
-    source: snapshot.source ?? '',
-    floor_usd: snapshot.floor_usd ?? snapshot.floorUsd ?? 0,
+    as_of: snapshot.as_of,
+    source: snapshot.source,
+    floor_usd: snapshot.floor_usd,
     model_version: MODEL_VERSION,
-    watchlist_size: watchlist.length || rows.length,
+    watchlist_size: snapshot.watchlist.length,
     board_size: rows.length,
-    early_size: countEarly(rows),
-    global_multiple: snapshot.global_multiple ?? snapshot.globalMultiple ?? 0,
+    early_size: countEarly(rows, snapshot.watchlist),
+    global_multiple: globalMultiple,
     growth_weight: 0.35,
     maturity_floor: 0.55,
     maturity_range: 0.45,
@@ -140,61 +115,62 @@ function payloadFor(snapshot, board, live) {
 }
 
 /**
- * Copy the static assets into the output and enforce their requirements.
+ * Copy the static assets into the output and enforce their requirements: the page and
+ * the three gate screenshots must all be present.
  */
 function copyStaticAssets(outputDir) {
   const rootDir = process.cwd();
-  copyTree(join(rootDir, 'dashboard'), join(outputDir, 'dashboard'));
+  const dashFiles = copyTree(join(rootDir, 'dashboard'), join(outputDir, 'dashboard'));
   const screenshotCount = copyTree(join(rootDir, 'screenshots'), join(outputDir, 'screenshots'));
   if (!existsSync(join(outputDir, 'dashboard', 'index.html'))) {
-    process.stderr.write('dashboard/index.html missing\n');
+    process.stderr.write('radar: dashboard/index.html is missing from this repository\n');
     process.exit(1);
   }
   if (screenshotCount < 3) {
-    process.stderr.write('need at least 3 screenshots, found ' + screenshotCount + '\n');
+    process.stderr.write('radar: screenshots/ holds ' + screenshotCount + ' image(s); the gate wants 3: board, detail, filtered\n');
     process.exit(1);
   }
+  return { dashFiles, screenshotCount };
 }
 
 /**
  * Write every generated artifact into the output directory.
  */
-async function writeOutput(outputDir, snapshot, board, live) {
+function writeOutput(outputDir, snapshot, board, sectors, globalMultiple, live) {
   mkdirSync(outputDir, { recursive: true });
-  const { rows } = splitBoard(board);
-  writeFileSync(join(outputDir, 'board.json'), JSON.stringify({ rows }) + '\n');
-  const script = await dataScript(payloadFor(snapshot, board, live));
-  writeFileSync(join(outputDir, 'data.js'), script);
-  copyStaticAssets(outputDir);
-  await buildDossier(outputDir, {
-    text_max_bytes: 65536,
-    screenshots: { max: 4, max_bytes: 524288 },
-    dashboard: { max_files: 400, max_bytes: 4194304 },
-  });
+  writeFileSync(join(outputDir, 'board.json'), JSON.stringify({ rows: board }) + '\n');
+  writeFileSync(join(outputDir, 'data.js'), dataScript(payloadFor(snapshot, board, sectors, globalMultiple, live)));
+  const { dashFiles, screenshotCount } = copyStaticAssets(outputDir);
+  writeFileSync(
+    join(outputDir, 'dossier.json'),
+    buildDossier(outputDir, {
+      text_max_bytes: 65536,
+      screenshots: { max: 4, max_bytes: 524288 },
+      dashboard: { max_files: 400, max_bytes: 4194304 },
+    }),
+  );
+  return { dashFiles, screenshotCount };
 }
 
 /**
- * Main orchestration.
+ * Main orchestration: parse, score, validate, write, report.
  */
-async function run() {
+function run() {
   const { input, output } = parseArgv(process.argv.slice(2));
-  const snapshot = await loadSnapshot(input);
-  const board = await buildBoard(snapshot);
-  const issue = boardIssue(board);
-  if (issue) {
-    process.stderr.write('board issue: ' + JSON.stringify(issue) + '\n');
+  const snapshot = loadSnapshot(input);
+  const { board, sectors, global: globalMultiple } = buildBoard(snapshot);
+  const issue = boardIssue(board, snapshot);
+  if (issue !== null) {
+    process.stderr.write('radar: the board would be refused by the gate: ' + issue + '\n');
     process.exit(1);
   }
-  const live = await liveRows(snapshot);
-  await writeOutput(output, snapshot, board, live);
-  const { rows, sectors } = splitBoard(board);
-  process.stdout.write('radar: snapshot loaded (source=' + (snapshot.source ?? 'unknown') + ')\n');
-  process.stdout.write('radar: board built (' + rows.length + ' rows, ' + countEarly(rows) + ' early, ' + sectors.length + ' sectors)\n');
-  process.stdout.write('radar: wrote ' + join(output, 'board.json') + ', ' + join(output, 'data.js') + ', ' + join(output, 'dossier.json') + '\n');
+  const live = liveRows(snapshot);
+  const { dashFiles, screenshotCount } = writeOutput(output, snapshot, board, sectors, globalMultiple, live);
+  process.stdout.write(
+    'radar: ' + MODEL_VERSION + ' scored ' + snapshot.protocols.length + ' protocols, ' + board.length + ' rows ranked (' + snapshot.watchlist.length + ' watchlisted)\n' +
+    'radar: ' + sectors.length + ' sectors, ' + live.length + ' live rows, global multiple ' + globalMultiple.toFixed(4) + '\n' +
+    'radar: wrote board.json, data.js, dashboard/ (' + dashFiles + ' files), screenshots/ (' + screenshotCount + ') and dossier.json in ' + output + '\n',
+  );
 }
 
-run().catch((error) => {
-  process.stderr.write(error && error.stack ? error.stack : String(error));
-  process.stderr.write('\n');
-  process.exit(1);
-});
+run();
