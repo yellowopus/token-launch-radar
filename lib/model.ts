@@ -358,6 +358,7 @@ export function boardIssue(board: BoardRow[], snapshot: Snapshot): string | null
       if (len < 20 || len > 600) return `${row.slug} has a farm step of ${len} characters`;
     }
   }
+  if (board.length > 0 && board[0]!.rank !== 1) return 'the first row is rank ' + board[0]!.rank;
   return null;
 }
 
@@ -471,4 +472,10 @@ export function parseSnapshot(text: string): Snapshot {
   }
 
   return { as_of: asOf, source, floor_usd: floorUsd, protocols, watchlist };
+}
+
+/** Assert the board obeys every invariant the scorer guarantees, throwing the first issue found. */
+export function assertBoardInvariants(board: BoardRow[], snapshot: Snapshot): void {
+  const issue = boardIssue(board, snapshot);
+  if (issue !== null) throw new Error(issue);
 }

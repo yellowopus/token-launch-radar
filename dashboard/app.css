@@ -211,3 +211,8 @@ footer b { color: var(--ink-2); font-weight: 500; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+/* legend */
+.legend { display:flex; gap:16px; flex-wrap:wrap; margin-top:12px; color:var(--ink-3); font-size:12px; }
+.legend b { color: var(--ink-2); font-weight:500; }
+
+.legend span { font-family: var(--mono); letter-spacing: 0.06em; }
