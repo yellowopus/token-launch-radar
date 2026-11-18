@@ -1,9 +1,9 @@
-// lib/model.ts — the radar's valuation engine.
+// lib/model.ts — the deterministic scoring engine behind the radar board.
 //
-// Everything the board shows is derived from the sealed snapshot: no protocol name is special-cased and
-// no implied value is hand-written. The sector multiple is measured from the snapshot itself — the
-// median market-cap-to-TVL ratio of the protocols in the same category that already trade — so the
-// board's claim about what a launch would be worth is an argument built out of the same file it reads.
+// Every number below is computed from the sealed snapshot rather than hard-coded per protocol. A
+// category's sector multiple is the median market-cap-to-TVL ratio among its already-trading peers,
+// pulled toward the cross-market median while the sample is small, so the implied value of a launch
+// is always traceable back to the same input file.
 
 export interface SnapshotProtocol {
   slug: string;
@@ -26,7 +26,7 @@ export interface Snapshot {
   watchlist: string[];
 }
 
-/** A row of the ranked board, as board.json carries it. */
+/** A row of the ranked board, exactly as board.json carries it. */
 export interface BoardRow {
   rank: number;
   slug: string;
@@ -45,7 +45,7 @@ export interface BoardRow {
   farm_steps: string[];
 }
 
-/** A protocol whose token already trades: shown beside the board, never ranked by the model. */
+/** A protocol whose token already trades; shown beside the board, never ranked by the model. */
 export interface LiveRow {
   slug: string;
   name: string;
@@ -86,7 +86,7 @@ export interface RadarData {
 
 export const MODEL_VERSION = 'sector-median-v1';
 
-/** Constants of the valuation, named in the dashboard's method panel. */
+/** Named constants of the valuation, mirrored by the dashboard's method panel. */
 export const MODEL = {
   growthWeight: 0.35,
   growthFloor: -60,
@@ -103,7 +103,7 @@ export const MODEL = {
 const DAY_MS = 86_400_000;
 const MAX_IMPLIED = 100_000_000_000_000;
 
-/** Categories that are not a protocol waiting on its own token: bridges, staking and exchange products. */
+/** Categories that describe products of another protocol, not protocols awaiting their own token. */
 const PRODUCT_CATEGORIES = new Set([
   'Liquid Staking',
   'Liquid Restaking',
@@ -117,9 +117,10 @@ const PRODUCT_CATEGORIES = new Set([
   'Decentralized BTC',
 ]);
 
-/** DefiLlama's version marker: a name ending in a release is a pool of another protocol, not a launch. */
+/** DefiLlama's version marker: a name ending in a release is a pool of another protocol. */
 const VERSIONED_NAME = /\s(V\d+(\.\d+)?|v\d+(\.\d+)?|\d+\.\d+)$/;
 
+/** The middle value of a non-empty list, averaging the two middles for even lengths. */
 const median = (values: number[]): number => {
   const sorted = [...values].sort((a, b) => a - b);
   const middle = sorted.length >> 1;
@@ -128,6 +129,7 @@ const median = (values: number[]): number => {
 
 const round4 = (n: number): number => Math.round(n * 10_000) / 10_000;
 
+/** A finite number, or null when the input is anything else. */
 const finite = (value: unknown): number | null =>
   typeof value === 'number' && Number.isFinite(value) ? value : null;
 
@@ -145,15 +147,15 @@ export function isPreToken(p: SnapshotProtocol): boolean {
   return p.gecko_id === null && p.symbol === null && p.mcap_usd === null;
 }
 
-/** Whether a pre-token protocol is a candidate for its own launch rather than a product of one that trades. */
+/** Whether a pre-token protocol is a launch candidate rather than a product of a trading protocol. */
 export function isCandidate(p: SnapshotProtocol): boolean {
   return isPreToken(p) && !PRODUCT_CATEGORIES.has(p.category ?? '') && !VERSIONED_NAME.test(p.name);
 }
 
 /**
- * The sector multiple: for every category, the median mcap/TVL of its protocols that already trade,
- * shrunk toward the whole market's median while the sample is small. A category with no precedent in
- * the snapshot falls back to the market median, and the page labels it measured or borrowed.
+ * The sector multiple: for each category, the median mcap/TVL of its already-trading protocols,
+ * pulled toward the whole market's median while the sample is small. Categories without enough
+ * precedent fall back to the market median and are labelled borrowed by the page.
  */
 export function sectorMultiples(protocols: SnapshotProtocol[]): {
   global: number;
@@ -247,8 +249,8 @@ function openPosition(p: SnapshotProtocol, capital: number, chain: string): stri
 }
 
 /**
- * The farm plan: five to eight steps, each with the action, what it costs and how long it takes. It is
- * derived from the protocol's own record — category, chains, TVL and age — never from a name list.
+ * The farm plan: five to eight steps, each with the action, what it costs and how long it takes.
+ * It is derived from the protocol's own record — category, chains, TVL and age — never from a name list.
  */
 export function farmPlan(p: SnapshotProtocol, age: number | null, onWatchlist: boolean): string[] {
   const chain = p.chains[0] ?? 'its main chain';
