@@ -1,16 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Launch Radar — pre-token protocols ranked by implied value</title>
-<link rel="stylesheet" href="app.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Launch Radar — pre-token protocols ranked by implied value</title>
+  <!-- Load the theme first, then the two scripts that render the page. -->
+  <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<a class="skip" href="#board">Skip to the board</a>
-<div id="app" aria-busy="true"></div>
-<div id="drawer-root"></div>
-<script src="../data.js"></script>
-<script src="app.js"></script>
+  <!-- Keyboard shortcut to jump straight past the chrome. -->
+  <a class="skip" href="#board">Skip to the board</a>
+
+  <!-- app.js renders the masthead, board, method panel and footer here. -->
+  <div id="app" aria-busy="true"></div>
+
+  <!-- The per-protocol detail drawer is mounted into this sibling root. -->
+  <div id="drawer-root"></div>
+
+  <!-- window.RADAR is written by main.ts; load it before the renderer. -->
+  <script src="../data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
